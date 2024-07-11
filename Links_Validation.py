@@ -26,6 +26,7 @@ if uploaded_file:
                 checked_data = check(stock, i, data)
                 checked_sheets.append(checked_data)
                 sheet_names.append(i)
+                st.write(f"Number of invalid links in {i} : {len(checked_data)}")
                 st.success(f"Validation for {i} is Done!")
 
             excel_file = create_excel_file(checked_sheets, sheet_names)
