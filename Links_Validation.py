@@ -1,4 +1,3 @@
-import streamlit as st
 from Link_check_functions import *
 
 st.set_page_config(layout="wide")
@@ -16,8 +15,20 @@ if uploaded_file:
         selected_sheet = st.selectbox("Select a sheet", sheet_names, index=None)
     if selected_sheet:
         data = pd.read_excel(uploaded_file, sheet_name=selected_sheet)
-        stock = st.selectbox("Select the stock column", data.columns)
-        options = st.multiselect("Select Columns to Validate", data.columns)
+        
+        columns = list(data.columns)
+        stock = st.selectbox("Select the stock column", options=columns, key="selectbox")
+
+        available_options = [col for col in columns if col != stock]
+
+        select_all_option = "Select All"
+        available_options_with_select_all = [select_all_option] + available_options
+
+        options = st.multiselect("Select Columns to Validate", options=available_options_with_select_all, key="multiselect")
+        if select_all_option in options:
+            options = available_options
+
+        st.write(f"Columns Selected : {options}")
         val = st.button("Validate")
         if val:
             sheet_names = []
